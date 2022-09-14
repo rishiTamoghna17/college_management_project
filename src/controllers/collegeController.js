@@ -61,8 +61,5 @@ const createCollege = async function (req, res) {
        catch (err) {
              return res.status(500).send({ status: false, message: "Error", error: err.message })
        }
-   
-
-    
  }
 module.exports.createCollege=createCollege
