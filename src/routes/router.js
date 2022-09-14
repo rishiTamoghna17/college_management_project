@@ -1,5 +1,9 @@
 const express = require('express');
-const router = express.Router();
+const route = express.Router();
+const collegeController= require("../controllers/collegeController")
+
+
+route.post("/functionup/colleges",collegeController.createCollege)
 
 
 
@@ -11,5 +15,4 @@ const router = express.Router();
 
 
 
-
-module.exports = router;
+module.exports = route;
