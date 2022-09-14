@@ -1,4 +1,3 @@
-const { accessSync } = require("fs")
 const collegeModel= require("../models/collegeModel")
 const internModel= require("../models/internModel")
 const isValid= function(value){
@@ -23,4 +22,8 @@ const createCollege = async function (req, res) {
         res.status(500).send({msg:err.messege})
     }
 }
+
+
+
+
 module.exports.createCollege=createCollege
