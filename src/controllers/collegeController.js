@@ -50,7 +50,7 @@ const createCollege = async function (req, res) {
             return res.status(400).send({ status: false, message: "you can not set isdeleted True" });
 
             //if college name is already present In DB or Not!
-            const findName = await collegeModel.findOne({ name: name })
+          const findName = await collegeModel.findOne({ name: name })
             if (findName) return res.status(400).send({ status: false, message: "Name Is Already Present In DB" });
 
             //create Data In DB
