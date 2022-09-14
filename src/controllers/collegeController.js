@@ -1,6 +1,7 @@
 
 const collegeModel= require("../models/collegeModel")
 const internModel= require("../models/internModel")
+const mongoose=require('mongoose')
 
 const createCollege = async function (req, res) { 
     
@@ -26,8 +27,6 @@ const createCollege = async function (req, res) {
             if (!regEx.test(name)) {
                   return res.status(400).send({ status: false, message: "Name is invalid" });
             }
-
-           
 
             //Check if fullName Is Vilid or Not?
             var regEex = /[a-z]+/;
@@ -62,4 +61,26 @@ const createCollege = async function (req, res) {
              return res.status(500).send({ status: false, message: "Error", error: err.message })
        }
  }
+ const getCollegeDetails= async function(req, res) {
+      try{
+          let data= req.query.name;
+          console.log(data);
+          let collegeDetails=await collegeModel.findOne({name:data})
+            //console.log(collegeDetails)
+          let details = await internModel.find({collegeId:collegeDetails._id}).select({_id:1,name:1,email:1,mobile:1})
+          console.log(details)
+          collegeDetails ={
+            name: collegeDetails.name,
+            fullName:collegeDetails.fullName, 
+            logoLink:collegeDetails.logoLink,
+            interns:details
+          }
+
+          return res.status(200).send({status:true,data:collegeDetails})
+    
+      }catch(err){
+          res.status(500).send({msg:err.messege})
+      }
+  }
 module.exports.createCollege=createCollege
+module.exports.getCollegeDetails=getCollegeDetails

@@ -4,7 +4,7 @@ const internModel = require("../models/internModel")
 const createIntern = async function (req, res) {
     try {
         let data = req.body
-        let { name, email, mobile, isDeleted, collegeId } = data
+        let { name, email, mobile, collegeId } = data
         if (!Object.keys(data).length) return res.status(400).send({ status: false, message: "pls enter the data in body" })
         //name validation
         if (!name) return res.status(400).send({ status: false, message: "name is mendatory" })
@@ -22,20 +22,16 @@ const createIntern = async function (req, res) {
         if (!(/^\+?[0-9-]/).test(mobile)) {
             return res.status(400).send({ status: false, message: "mobileno should be in 0-9" });
         }
-        //check if isDeleted is TRUE/FALSE ?
-        if (isDeleted && (isDeleted === "" || (!(typeof isDeleted == "boolean")))) {
-            return res.status(400).send({ status: false, message: "isDeleted Must be TRUE OR FALSE" });
-        }
-        if (isDeleted)
-            return res.status(400).send({ status: false, message: "you can not set isdeleted True" });
-        let findCollege = await collegeModel.findOne({ _id: data.collegeId }).populate('collegeId')
-        console.log(findCollege)
-        if (!findCollege) return res.status(400).send({ satus: false, msg: "college id is not present" })
+        
         if(!mongoose.isValidObjectId(collegeId)){
             return res.status(400).send({status:false,message:"Invalid collegeId"})
         }
+        let getCollege = await collegeModel.findById(collegeId)
+        if(!getCollege){
+          return res.status(404).send({status:false,message:"college is not registered"})
+        }
         let savedata = await internModel.create(data)
-        res.status(201).send({ status: true, data: savedata, findCollege })
+         return res.status(201).send({ status: true, data:savedata })
     }
 
     catch (err) {
