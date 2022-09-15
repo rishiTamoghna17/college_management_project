@@ -7,7 +7,7 @@ const createIntern = async function (req, res) {
     try {
         let data = req.body
         let { name, email, mobile, collegeId } = data
-        if (!Object.keys(data).length) return res.status(400).send({ status: false, message: "pls enter the data in body" })
+        if (Object.keys(data).length === 0) return res.status(400).send({ status: false, message: "pls enter the data in body" })
         //name validation
         if (!name) return res.status(400).send({ status: false, message: "name is mendatory" })
         let regEx = /^[a-zA-Z]+ [a-zA-Z]/;
