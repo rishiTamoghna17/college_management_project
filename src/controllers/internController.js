@@ -12,7 +12,7 @@ const createIntern = async function (req, res) {
     try {
         let data = req.body
         console.log(data)
-        let { name, email, mobile, collegeId } = data
+        let { name, email, mobile, collegeName } = data
         if (Object.keys(data).length === 0){
          return res.status(400).send({ status: false, message: "pls enter the data in body" })
         }
@@ -49,17 +49,10 @@ const createIntern = async function (req, res) {
         if (!(/^[6-9]\d{9}$/).test(mobile)) {
             return res.status(400).send({ status: false, message: "mobileno should be in 0-9" });
         }
-        if(!isValid(collegeId)){
-            return res.status(400).send({ status: false, message: "collegeId is mendatory" })
-        }
+        findCollege = await collegeModel.findOne({ name: collegeName, isDeleted: false })
+        if (!findCollege) return res.status(404).send({ status: false, message: "Entered college is Not present in DB" })
+        data.collegeId = (findCollege._id).toString()
 
-        if (!mongoose.isValidObjectId(collegeId)) {
-            return res.status(400).send({ status: false, message: "Invalid collegeId" })
-        }
-        let getCollege = await collegeModel.findById(collegeId)
-        if (!getCollege) {
-            return res.status(404).send({ status: false, message: "college is not registered" })
-        }
         let savedata = await internModel.create(data)
         console.log(savedata)
         return res.status(201).send({ status: true, data:savedata })
