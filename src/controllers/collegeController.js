@@ -3,6 +3,12 @@ const collegeModel = require("../models/collegeModel")
 const internModel = require("../models/internModel")
 const mongoose = require('mongoose')
 
+const isValid = function (value) {
+      if (typeof value === "undefined" || value === null) return false;
+      if (typeof value === "string" && value.trim().length === 0) return false;
+      return true;
+    };
+
 const createCollege = async function (req, res) {
 
       try {
@@ -10,7 +16,7 @@ const createCollege = async function (req, res) {
 
             // destructure college data
             let { name, fullName, logoLink, isDeleted, ...rest } = data
-            console.log(data)
+            
             if (!Object.keys(data).length) return res.status(400).send({ status: false, message: "pls enter the data in body" })
 
             //do not accept undefiend attributes
@@ -43,11 +49,9 @@ const createCollege = async function (req, res) {
             }
 
             //check if isDeleted is TRUE/FALSE ?
-            if (isDeleted && (isDeleted === "" || (!(typeof isDeleted == "boolean")))) {
-                  return res.status(400).send({ status: false, message: "isDeleted Must be TRUE OR FALSE" });
+            if ((isValid(isDeleted)||(!(typeof isDeleted === "boolean")))&&isDeleted===true) {
+                  return res.status(400).send({ status: false, message: "isDeleted Must be Boolean type and alse false" });
             }
-            if (isDeleted)
-                  return res.status(400).send({ status: false, message: "you can not set isdeleted True" });
 
             //if college name is already present In DB or Not!
             const findName = await collegeModel.findOne({ name: name })
