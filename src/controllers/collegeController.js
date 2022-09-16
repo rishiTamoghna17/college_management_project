@@ -67,7 +67,7 @@ const createCollege = async function (req, res) {
 }
 const getCollegeDetails = async function (req, res) {
       try {
-            let data = req.query.name;
+            let data = req.query.collegeName;
             console.log(data);
             let collegeDetails = await collegeModel.findOne({ name: data })
             //console.log(collegeDetails)
