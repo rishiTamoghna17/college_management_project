@@ -1,6 +1,3 @@
-# Project2-grp-39
-# Plutonium
-
 ## Open to Intern Project Requirement
 
 ### Key points
